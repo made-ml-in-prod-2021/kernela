@@ -43,16 +43,6 @@ LOGGER_SETUP = {
             'level': 'INFO',
             'handlers': ['default_console'],
             'propagate': False
-        },
-        'kp.dataset': {
-            'level': 'INFO',
-            'handlers': ['default_console'],
-            'propagate': False
-        },
-        'kp.datamodule': {
-            'level': 'DEBUG',
-            'handlers': ['default_console'],
-            'propagate': False
         }
     },
     'root': {

@@ -1,5 +1,5 @@
 generate-report:
-  cmd: python ./genrate_report.py --config ./configs/report_config.yml
+  cmd: python ./generate_report.py --config ./configs/report_config.yml
   deps:
   - path: ./configs/report_config.yml
     md5: 2beccce399ee38db3a0e03ac73843313
@@ -7,10 +7,10 @@ generate-report:
   - path: ./data/data.zip
     md5: fd05c5ac78ac6c6b4671edf064738c95
     size: 3478
-  - path: ./genrate_report.py
-    md5: 9cab4661d89bbecfb80f5220dc2afdd5
+  - path: ./generate_report.py
+    md5: da8a48e38f604d5f01583ef206b91aa2
     size: 871
   outs:
   - path: ./data/report/eda.html
-    md5: 83897aa617a00ff9626300d79bd4ed3a
-    size: 2200536
+    md5: 01812bb11ccbef607032efa0ed53de83
+    size: 2200542

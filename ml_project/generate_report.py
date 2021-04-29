@@ -16,7 +16,7 @@ def main(args):
     data = data.infer_objects()
     profile = ProfileReport(data, title='Pandas Profiling Report', explorative=True)
 
-    logger.info("save report to %s", out_path)
+    logger.info("Save report to %s", out_path)
     profile.to_file(str(out_path))
 
 

@@ -1,10 +1,11 @@
 stages:
   generate-report:
-    cmd: python ./genrate_report.py --config ./configs/report_config.yml
+    cmd: python ./generate_report.py --config ./configs/report_config.yml
     deps:
-    - ./configs/report_config.yml
-    - ./data/data.zip
-    - ./genrate_report.py
+      - ./configs/report_config.yml
+      - ./data/data.zip
+      - ./generate_report.py
     outs:
-    - ./data/report/eda.html:
-        cache: false
+      - ./data/report/eda.html:
+          cache: false
+          persist: true
