@@ -8,3 +8,4 @@ scikit-learn~=0.24
 sklearn-pandas~=2.1
 ConfigArgParse~=1.4
 dvc~=1.11
+PyYAML~=5.4

@@ -1,4 +1,6 @@
 import pandas as pd
+from sklearn import compose
+from sklearn.preprocessing import StandardScaler
 
 
 def clean_data(data: pd.DataFrame, category_threshold: int):
@@ -13,3 +15,7 @@ def clean_data(data: pd.DataFrame, category_threshold: int):
 
 def feature_target_split(data: pd.DataFrame, target_variable: str):
     return data[data.columns.drop(target_variable)].copy(), data[target_variable].to_numpy()
+
+
+def get_numeric_transform(col_names, **kwargs):
+    return compose.ColumnTransformer([("normalize", StandardScaler(**kwargs), col_names)])

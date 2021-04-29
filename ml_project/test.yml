@@ -1,0 +1,280 @@
+!!python/object:sklearn.pipeline.Pipeline
+_sklearn_version: 0.24.2
+memory: null
+steps:
+- !!python/tuple
+  - feature_transform
+  - !!python/object:sklearn.compose._column_transformer.ColumnTransformer
+    _columns:
+    - &id002
+      - cp
+      - restecg
+      - slope
+      - thal
+    - &id003
+      - age
+      - trestbps
+      - chol
+      - thalach
+      - oldpeak
+      - ca
+    _df_columns: !!python/object/apply:pandas.core.indexes.base._new_Index
+    - !!python/name:pandas.core.indexes.base.Index ''
+    - data: &id001 !!python/object/apply:numpy.core.multiarray._reconstruct
+        args:
+        - &id004 !!python/name:numpy.ndarray ''
+        - !!python/tuple
+          - 0
+        - !!binary |
+          Yg==
+        state: !!python/tuple
+        - 1
+        - !!python/tuple
+          - 13
+        - !!python/object/apply:numpy.dtype
+          args:
+          - O8
+          - false
+          - true
+          state: !!python/tuple
+          - 3
+          - '|'
+          - null
+          - null
+          - null
+          - -1
+          - -1
+          - 63
+        - false
+        - - age
+          - sex
+          - cp
+          - trestbps
+          - chol
+          - fbs
+          - restecg
+          - thalach
+          - exang
+          - oldpeak
+          - slope
+          - ca
+          - thal
+      name: null
+    _feature_names_in: *id001
+    _has_str_cols: true
+    _n_features: 13
+    _remainder: !!python/tuple
+    - remainder
+    - drop
+    - &id008
+      - 1
+      - 5
+      - 8
+    _sklearn_version: 0.24.2
+    n_features_in_: 13
+    n_jobs: null
+    remainder: drop
+    sparse_output_: false
+    sparse_threshold: 0.3
+    transformer_weights: null
+    transformers:
+    - !!python/tuple
+      - categorical
+      - !!python/object:sklearn.preprocessing._encoders.OneHotEncoder
+        _sklearn_version: 0.24.2
+        categories: auto
+        drop: null
+        dtype: &id006 !!python/name:numpy.float64 ''
+        handle_unknown: ignore
+        sparse: true
+      - *id002
+    - !!python/tuple
+      - numeric
+      - !!python/object:sklearn.preprocessing._data.StandardScaler
+        _sklearn_version: 0.24.2
+        copy: true
+        with_mean: true
+        with_std: true
+      - *id003
+    transformers_:
+    - !!python/tuple
+      - categorical
+      - !!python/object:sklearn.preprocessing._encoders.OneHotEncoder
+        _sklearn_version: 0.24.2
+        categories: auto
+        categories_:
+        - !!python/object/apply:numpy.core.multiarray._reconstruct
+          args:
+          - *id004
+          - !!python/tuple
+            - 0
+          - !!binary |
+            Yg==
+          state: !!python/tuple
+          - 1
+          - !!python/tuple
+            - 4
+          - &id005 !!python/object/apply:numpy.dtype
+            args:
+            - i8
+            - false
+            - true
+            state: !!python/tuple
+            - 3
+            - <
+            - null
+            - null
+            - null
+            - -1
+            - -1
+            - 0
+          - false
+          - !!binary |
+            AAAAAAAAAAABAAAAAAAAAAIAAAAAAAAAAwAAAAAAAAA=
+        - !!python/object/apply:numpy.core.multiarray._reconstruct
+          args:
+          - *id004
+          - !!python/tuple
+            - 0
+          - !!binary |
+            Yg==
+          state: !!python/tuple
+          - 1
+          - !!python/tuple
+            - 3
+          - *id005
+          - false
+          - !!binary |
+            AAAAAAAAAAABAAAAAAAAAAIAAAAAAAAA
+        - !!python/object/apply:numpy.core.multiarray._reconstruct
+          args:
+          - *id004
+          - !!python/tuple
+            - 0
+          - !!binary |
+            Yg==
+          state: !!python/tuple
+          - 1
+          - !!python/tuple
+            - 3
+          - *id005
+          - false
+          - !!binary |
+            AAAAAAAAAAABAAAAAAAAAAIAAAAAAAAA
+        - !!python/object/apply:numpy.core.multiarray._reconstruct
+          args:
+          - *id004
+          - !!python/tuple
+            - 0
+          - !!binary |
+            Yg==
+          state: !!python/tuple
+          - 1
+          - !!python/tuple
+            - 4
+          - *id005
+          - false
+          - !!binary |
+            AAAAAAAAAAABAAAAAAAAAAIAAAAAAAAAAwAAAAAAAAA=
+        drop: null
+        drop_idx_: null
+        dtype: *id006
+        handle_unknown: ignore
+        sparse: true
+      - *id002
+    - !!python/tuple
+      - numeric
+      - !!python/object:sklearn.preprocessing._data.StandardScaler
+        _sklearn_version: 0.24.2
+        copy: true
+        mean_: !!python/object/apply:numpy.core.multiarray._reconstruct
+          args:
+          - *id004
+          - !!python/tuple
+            - 0
+          - !!binary |
+            Yg==
+          state: !!python/tuple
+          - 1
+          - !!python/tuple
+            - 6
+          - &id007 !!python/object/apply:numpy.dtype
+            args:
+            - f8
+            - false
+            - true
+            state: !!python/tuple
+            - 3
+            - <
+            - null
+            - null
+            - null
+            - -1
+            - -1
+            - 0
+          - false
+          - !!binary |
+            UNen69M1S0AkzZHmSHNgQAAAAAAA0G5A50hzpDmyYkBGwaJgUbDwPzj5m/xN/uY/
+        n_features_in_: 6
+        n_samples_seen_: !!python/object/apply:numpy.core.multiarray.scalar
+        - *id005
+        - !!binary |
+          LgEAAAAAAAA=
+        scale_: !!python/object/apply:numpy.core.multiarray._reconstruct
+          args:
+          - *id004
+          - !!python/tuple
+            - 0
+          - !!binary |
+            Yg==
+          state: !!python/tuple
+          - 1
+          - !!python/tuple
+            - 6
+          - *id007
+          - false
+          - !!binary |
+            /s2kZOIQIkCSqXBWx4gxQGCnlEZ41UlA+KGPZJbdNkCfKRf7bI3yP9noMdjOFPA/
+        var_: !!python/object/apply:numpy.core.multiarray._reconstruct
+          args:
+          - *id004
+          - !!python/tuple
+            - 0
+          - !!binary |
+            Yg==
+          state: !!python/tuple
+          - 1
+          - !!python/tuple
+            - 6
+          - *id007
+          - false
+          - !!binary |
+            wHa/Mw9mVECeWyDeODdzQHDyN/kb26RAoU5VMq1WgEAA46NIF4P1P+dY8r+4KfA/
+        with_mean: true
+        with_std: true
+      - *id003
+    - !!python/tuple
+      - remainder
+      - drop
+      - *id008
+    verbose: false
+- !!python/tuple
+  - cls
+  - !!python/object:sklearn.linear_model._logistic.LogisticRegression
+    C: 1.0
+    _sklearn_version: 0.24.2
+    class_weight: null
+    dual: false
+    fit_intercept: true
+    intercept_scaling: 1
+    l1_ratio: null
+    max_iter: 100
+    multi_class: auto
+    n_jobs: null
+    penalty: l2
+    random_state: null
+    solver: lbfgs
+    tol: 0.0001
+    verbose: 0
+    warm_start: false
+verbose: false
