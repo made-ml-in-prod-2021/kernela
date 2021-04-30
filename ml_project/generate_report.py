@@ -1,18 +1,21 @@
 import pathlib
 import logging
 
-import configargparse
 from pandas_profiling import ProfileReport
 import pandas as pd
+import hydra
 
 import heat_diss
+from config import ReportConfig
 
 
-def main(args):
+@hydra.main(config_name="report_config")
+def main(config: ReportConfig):
+    orig_wd = pathlib.Path(hydra.utils.get_original_cwd())
     logger = logging.getLogger()
-    out_path = pathlib.Path(args.output_report)
+    out_path = orig_wd / config.output_report
     out_path.parent.mkdir(exist_ok=True, parents=True)
-    data = pd.read_csv(args.input_data)
+    data = pd.read_csv(orig_wd / config.input_zip)
     data = data.infer_objects()
     profile = ProfileReport(data, title='Pandas Profiling Report', explorative=True)
 
@@ -21,11 +24,4 @@ def main(args):
 
 
 if __name__ == "__main__":
-    parser = configargparse.ArgumentParser()
-    parser.add_argument("--config", is_config_file=True)
-    parser.add_argument("--input_data", type=str, required=True)
-    parser.add_argument("--output_report", type=str, required=True)
-
-    args = parser.parse_args()
-
-    main(args)
+    main()

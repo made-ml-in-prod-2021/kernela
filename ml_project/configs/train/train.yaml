@@ -1,0 +1,31 @@
+defaults:
+  - cls_config: log_reg
+
+cross_val:
+  cv: 3
+  scores: [accuracy, f1]
+output_metric: ./data/train/log_reg_metrics.json
+data_config:
+  input_data: ./data/data.zip
+  target_variable: target
+  unique_values_limit: 10
+feature_transform:
+  transformers:
+    - columns: [age, trestbps, chol, thalach, oldpeak, ca]
+      classname: sklearn.preprocessing.StandardScaler
+      stage_name: normalize
+      params:
+        with_mean: true
+        with_std: true
+    - columns: [sex, fbs, exang]
+      classname: heat_diss.preprocessing.transformer.BinaryEncoder
+      stage_name: binary_encoder
+      params:
+        ignore_unknown: false
+        dtype: float
+    - columns: [cp, restecg, slope, thal]
+      classname: sklearn.preprocessing.OneHotEncoder
+      stage_name: one_hot_encoding
+      params:
+        sparse: false
+        handle_unknown: ignore

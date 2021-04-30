@@ -1,2 +1,2 @@
-input_data: ./data/data.zip
+input_zip: ./data/data.zip
 output_report: ./data/report/eda.html

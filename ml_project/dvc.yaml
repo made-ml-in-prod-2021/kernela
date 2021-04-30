@@ -1,11 +1,30 @@
 stages:
   generate-report:
-    cmd: python ./generate_report.py --config ./configs/report_config.yml
+    cmd: python ./generate_report.py -cd ./configs
     deps:
-      - ./configs/report_config.yml
-      - ./data/data.zip
-      - ./generate_report.py
+    - ./configs/report_config.yaml
+    - ./data/data.zip
+    - ./generate_report.py
     outs:
-      - ./data/report/eda.html:
-          cache: false
-          persist: true
+    - ./data/report/eda.html:
+        cache: false
+        persist: true
+  train-log-reg:
+    cmd: python ./train.py -cd ./configs/train cls_config=log_reg
+    deps:
+    - ./config.py
+    - ./configs/train/cls_config/log_reg.yaml
+    - ./data/data.zip
+    - ./heat_diss
+    - ./train.py
+    metrics:
+    - ./data/train/log_reg_metrics.json
+  train-test-split:
+    cmd: python ./train_test_split.py -cd ./configs/train_test_split
+    deps:
+    - ./config.py
+    - ./configs/train_test_split/train_test_split.yaml
+    - ./data/data.zip
+    - ./train_test_split.py
+    outs:
+    - ./data/train-test

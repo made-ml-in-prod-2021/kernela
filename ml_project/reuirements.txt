@@ -6,6 +6,6 @@ pandas-profiling~=2.11
 tzlocal~=2.1
 scikit-learn~=0.24
 sklearn-pandas~=2.1
-ConfigArgParse~=1.4
+hydra-core~=1.0
 dvc~=1.11
 PyYAML~=5.4

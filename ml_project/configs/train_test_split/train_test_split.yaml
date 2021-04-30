@@ -1,0 +1,5 @@
+train_size: 0.8
+path_zip: ./data/data.zip
+out_dir: ./data/train-test
+random_state: 43
+target_variable: target

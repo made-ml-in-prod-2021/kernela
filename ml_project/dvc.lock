@@ -1,16 +1,59 @@
 generate-report:
-  cmd: python ./generate_report.py --config ./configs/report_config.yml
+  cmd: python ./generate_report.py -cd ./configs
   deps:
-  - path: ./configs/report_config.yml
-    md5: 2beccce399ee38db3a0e03ac73843313
-    size: 68
+  - path: ./configs/report_config.yaml
+    md5: 2d5603df54afbbe87fdb6f8077d73ccd
+    size: 67
   - path: ./data/data.zip
     md5: fd05c5ac78ac6c6b4671edf064738c95
     size: 3478
   - path: ./generate_report.py
-    md5: da8a48e38f604d5f01583ef206b91aa2
-    size: 871
+    md5: f14cc1f66e12fd520624b4d787dae5e7
+    size: 743
   outs:
   - path: ./data/report/eda.html
-    md5: 01812bb11ccbef607032efa0ed53de83
-    size: 2200542
+    md5: 72d869c103db67acd274f257eb8d8179
+    size: 1985565
+train-log-reg:
+  cmd: python ./train.py -cd ./configs/train cls_config=log_reg
+  deps:
+  - path: ./config.py
+    md5: 436b38dce7a31d2e47b53cf21e0a9038
+    size: 1416
+  - path: ./configs/train/cls_config/log_reg.yaml
+    md5: 9c1c4c443a4a753e5aab54eecb523675
+    size: 93
+  - path: ./data/data.zip
+    md5: fd05c5ac78ac6c6b4671edf064738c95
+    size: 3478
+  - path: ./heat_diss
+    md5: 15e6855579fa1f6e548c43c924c5fd4b.dir
+    size: 11105
+    nfiles: 13
+  - path: ./train.py
+    md5: 4f4eb2514fc946b6f67ad3b42b8034cd
+    size: 2707
+  outs:
+  - path: ./data/train/log_reg_metrics.json
+    md5: 9d07c78576562750e805e45e79446d4c
+    size: 301
+train-test-split:
+  cmd: python ./train_test_split.py -cd ./configs/train_test_split
+  deps:
+  - path: ./config.py
+    md5: e76f13a5d12f83596e641a5d09cff7e4
+    size: 1579
+  - path: ./configs/train_test_split/train_test_split.yaml
+    md5: 1fce5e0dd61bcecf31c950490e3191f0
+    size: 115
+  - path: ./data/data.zip
+    md5: fd05c5ac78ac6c6b4671edf064738c95
+    size: 3478
+  - path: ./train_test_split.py
+    md5: 27d7691fdc4a4950f730d545bd85fa31
+    size: 1159
+  outs:
+  - path: ./data/train-test
+    md5: d39e967181268883e2bc5908b9e15b4e.dir
+    size: 11666
+    nfiles: 2

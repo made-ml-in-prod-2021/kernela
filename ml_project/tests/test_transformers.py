@@ -1,6 +1,4 @@
-from heat_diss.preprocessing.preprocess import get_binary_transfomer
 import os
-from scipy.sparse.construct import random
 
 import yaml
 import pytest
@@ -9,7 +7,7 @@ import random
 import numpy as np
 import pandas as pd
 from faker import Faker
-from heat_diss.preprocessing import get_numeric_transform, get_categorical_transfomer
+from heat_diss.preprocessing import get_numeric_transform, get_categorical_transfomer, get_binary_transfomer
 
 SEED = 10
 CATEGORICAL_DATA_SIZE = 20
@@ -18,9 +16,9 @@ Faker.seed(SEED)
 random.seed(SEED)
 np.random.seed(SEED)
 
-NUMERIC_DATA_TRANSFORM_CONFIG = os.path.join("configs", "train", "standard_scaler.yml")
-CAT_DATA_TRANSFORMER_CONFIG = os.path.join("configs", "train", "one_hot.yml")
-BIN_DATA_TRANSFORMER_CONFIG = os.path.join("configs", "train", "binary_encoder.yml")
+NUMERIC_DATA_TRANSFORM_CONFIG = os.path.join("configs", "transformers", "standard_scaler.yml")
+CAT_DATA_TRANSFORMER_CONFIG = os.path.join("configs", "transformers", "one_hot.yml")
+BIN_DATA_TRANSFORMER_CONFIG = os.path.join("configs", "transformers", "binary_encoder.yml")
 
 
 @pytest.fixture
