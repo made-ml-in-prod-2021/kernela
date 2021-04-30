@@ -66,14 +66,17 @@ class FeatureTransformerConfig:
 
 @dataclass
 class DataConfig:
-    input_data: str = MISSING
+    path_to_train: str = MISSING
+    path_to_test: str = MISSING
     target_variable: str = MISSING
     unique_values_limit: int = MISSING
 
 
 @dataclass
 class TrainConfig:
+    model_path: str = MISSING
     cls_config: ClsConfog = MISSING
+    cross_val: CrossValConfig = MISSING
     feature_transform: FeatureTransformerConfig = MISSING
     data_config: DataConfig = MISSING
     output_metric: str = MISSING

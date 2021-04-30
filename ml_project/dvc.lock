@@ -18,31 +18,38 @@ train-log-reg:
   cmd: python ./train.py -cd ./configs/train cls_config=log_reg
   deps:
   - path: ./config.py
-    md5: 436b38dce7a31d2e47b53cf21e0a9038
-    size: 1416
+    md5: 75f64d016df6c8e39378f4f0f6d03535
+    size: 1687
   - path: ./configs/train/cls_config/log_reg.yaml
     md5: 9c1c4c443a4a753e5aab54eecb523675
     size: 93
   - path: ./data/data.zip
     md5: fd05c5ac78ac6c6b4671edf064738c95
     size: 3478
+  - path: ./data/train-test
+    md5: d39e967181268883e2bc5908b9e15b4e.dir
+    size: 11666
+    nfiles: 2
   - path: ./heat_diss
     md5: 15e6855579fa1f6e548c43c924c5fd4b.dir
     size: 11105
     nfiles: 13
   - path: ./train.py
-    md5: 4f4eb2514fc946b6f67ad3b42b8034cd
-    size: 2707
+    md5: 937db05d99ffe0a35aedca106b63c2e6
+    size: 4083
   outs:
   - path: ./data/train/log_reg_metrics.json
-    md5: 9d07c78576562750e805e45e79446d4c
-    size: 301
+    md5: 800b75475d32697bcbcbc9f18c452563
+    size: 31
+  - path: ./data/train/model.pickle
+    md5: 8e3a74b9796645aa914fcb91b8181ce5
+    size: 2961
 train-test-split:
   cmd: python ./train_test_split.py -cd ./configs/train_test_split
   deps:
   - path: ./config.py
-    md5: e76f13a5d12f83596e641a5d09cff7e4
-    size: 1579
+    md5: 75f64d016df6c8e39378f4f0f6d03535
+    size: 1687
   - path: ./configs/train_test_split/train_test_split.yaml
     md5: 1fce5e0dd61bcecf31c950490e3191f0
     size: 115

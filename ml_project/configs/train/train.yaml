@@ -5,8 +5,10 @@ cross_val:
   cv: 3
   scores: [accuracy, f1]
 output_metric: ./data/train/log_reg_metrics.json
+model_path: ./data/train/model.pickle
 data_config:
-  input_data: ./data/data.zip
+  path_to_train: ./data/train-test/train.csv
+  path_to_test: ./data/train-test/test.csv
   target_variable: target
   unique_values_limit: 10
 feature_transform:
