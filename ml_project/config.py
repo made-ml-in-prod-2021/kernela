@@ -83,3 +83,5 @@ class PlotConfMatrixConfig:
     title: str = "Cross validation confusion matrix"
     fromat_str: str = "{0:.4f}"
     dpi: int = 300
+    width_inches: int = 3
+    height_inches: int = 3

@@ -29,7 +29,7 @@ def plot(cfg: PlotConfMatrixConfig):
     conf_matrix = confusion_matrix(
         data[cfg.actual_col], data[cfg.predicted_col], normalize=cfg.normalize)
 
-    fig = plt.figure()
+    fig = plt.figure(figsize=(cfg.width_inches, cfg.height_inches))
     ax = fig.add_subplot(111)
     ax.set_title(cfg.title)
     ax.imshow(conf_matrix, interpolation=cfg.interpolation, cmap=cfg.cmap)

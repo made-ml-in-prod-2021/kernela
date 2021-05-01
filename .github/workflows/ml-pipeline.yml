@@ -54,7 +54,9 @@ jobs:
 
           # Publish confusion matrix 
           dvc repro log-reg-plot-conf-matrix
+          dvc repro svc-plot-conf-matrix
           cml-publish ./data/train/log_reg/conf_matrix.png --md >> report.md
+           cml-publish ./data/train/svc/conf_matrix.png --md >> report.md
       - name: Send report
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
