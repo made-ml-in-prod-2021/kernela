@@ -18,8 +18,8 @@ train-log-reg:
   cmd: python ./train.py -cd ./configs/train -cn train_log_reg
   deps:
   - path: ./config.py
-    md5: 1d869949dc0bb1798a540193da011776
-    size: 1918
+    md5: dcb594a1e796290efcca8b2c7e89dd8f
+    size: 1935
   - path: ./configs/train/train_log_reg.yaml
     md5: b24688521ce9fb378ca393c0456c7faf
     size: 1157
@@ -48,8 +48,8 @@ train-test-split:
   cmd: python ./train_test_split.py -cd ./configs/train_test_split
   deps:
   - path: ./config.py
-    md5: 1d869949dc0bb1798a540193da011776
-    size: 1918
+    md5: dcb594a1e796290efcca8b2c7e89dd8f
+    size: 1935
   - path: ./configs/train_test_split/train_test_split.yaml
     md5: d33e7e5cfe3f6b28cc0eec7f64d687cd
     size: 195
@@ -68,8 +68,8 @@ log-reg-predict:
   cmd: python ./predict.py -cd ./configs -cn ./predict_log_reg
   deps:
   - path: ./config.py
-    md5: acc1eca89a2f8902c68e41505a024dda
-    size: 1560
+    md5: dcb594a1e796290efcca8b2c7e89dd8f
+    size: 1935
   - path: ./configs/predict_log_reg.yaml
     md5: d5e9bd7e5ce8049e9ec524cf3f61d0eb
     size: 134
@@ -88,14 +88,15 @@ log-reg-predict:
     md5: 0c44a90ad58ada36cce8290a85e53f20
     size: 9763
 log-reg-plot-conf-matrix:
-  cmd: python ./plot_conf_matrix.py -cd ./configs
+  cmd: python ./plot_conf_matrix.py -cd ./configs title="Logistic regression confusion
+    matrix"
   deps:
   - path: ./config.py
-    md5: 1d869949dc0bb1798a540193da011776
-    size: 1918
+    md5: dcb594a1e796290efcca8b2c7e89dd8f
+    size: 1935
   - path: ./configs/plot_conf_matrix.yaml
-    md5: 7549025fc09c3509bee3c50f66393e79
-    size: 155
+    md5: c55a3a03457f041c5b66ca2c3af38636
+    size: 165
   - path: ./data/train/log_reg/conf_matrix.csv
     md5: 29928e8b58a832d79b6077baf9c119b3
     size: 1223
@@ -104,5 +105,55 @@ log-reg-plot-conf-matrix:
     size: 1619
   outs:
   - path: ./data/train/log_reg/conf_matrix.png
-    md5: 15d3c0c1a8aa05cb2c9bb5bbefb1b830
-    size: 46518
+    md5: 44afc7ef7962a4e511d529392730ddde
+    size: 34313
+train-svc:
+  cmd: python ./train.py -cd ./configs/train -cn train_svc
+  deps:
+  - path: ./config.py
+    md5: dcb594a1e796290efcca8b2c7e89dd8f
+    size: 1935
+  - path: ./configs/train/train_svc.yaml
+    md5: 486507320181675e1ee85ec6cfe9fcae
+    size: 1140
+  - path: ./data/train-test
+    md5: 4213da276d20dae9174d6ad89860c1f3.dir
+    size: 18538
+    nfiles: 2
+  - path: ./heat_diss
+    md5: 2c9d50bfdbadc56f2179b091cd0009d6.dir
+    size: 10936
+    nfiles: 13
+  - path: ./train.py
+    md5: 82c27e1870ddab3e4a3c51c5a5c653f5
+    size: 4388
+  outs:
+  - path: ./data/train/svc/conf_matrix.csv
+    md5: 766ded95a3e2186abc795b861061ce2b
+    size: 1223
+  - path: ./data/train/svc/model.pickle
+    md5: da6f033ba4125b71a6832ea9b5ed69e8
+    size: 31197
+  - path: ./data/train/svc/svc_metrics.json
+    md5: 0237d5e4e810b4d4089a8ac5f1d4dfd4
+    size: 31
+svc-plot-conf-matrix:
+  cmd: python ./plot_conf_matrix.py -cd ./configs train=train_svc title="SVC confusion
+    matrix" output_image=./data/train/svc/conf_matrix.png
+  deps:
+  - path: ./config.py
+    md5: dcb594a1e796290efcca8b2c7e89dd8f
+    size: 1935
+  - path: ./configs/plot_conf_matrix.yaml
+    md5: c55a3a03457f041c5b66ca2c3af38636
+    size: 165
+  - path: ./data/train/svc/conf_matrix.csv
+    md5: 766ded95a3e2186abc795b861061ce2b
+    size: 1223
+  - path: ./plot_conf_matrix.py
+    md5: c2e67a376065134271be35ec6e337954
+    size: 1619
+  outs:
+  - path: ./data/train/svc/conf_matrix.png
+    md5: dfe43358449f3e8bb504b420e7b4b86b
+    size: 30963
