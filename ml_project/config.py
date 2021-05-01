@@ -69,3 +69,17 @@ class PredictConfig:
     train_test_split: TrainTestSplitConfig = MISSING
     train: TrainConfig = MISSING
     out_prediction: str = MISSING
+
+
+@dataclass
+class PlotConfMatrixConfig:
+    train: TrainConfig = MISSING
+    output_image: str = MISSING
+    actual_col: str = MISSING
+    predicted_col: str = MISSING
+    normalize: str = MISSING
+    cmap: str = "summer_r"
+    interpolation: str = "none"
+    title: str = "Confusion matrix"
+    fromat_str: str = "{0:.4f}"
+    dpi: int = 300

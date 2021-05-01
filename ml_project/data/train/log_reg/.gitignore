@@ -1,3 +1,4 @@
 /model.pickle
 /log_reg_metrics.json
 /conf_matrix.csv
+/conf_matrix.png
