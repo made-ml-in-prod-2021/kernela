@@ -12,7 +12,6 @@ import pandas as pd
 from heat_diss.preprocessing import feature_target_split, clean_data
 from config import ClsConfog, CrossValConfig, \
     FeatureTransformerConfig, TrainConfig
-
 from utils import get_class_type, dump_pickle
 
 LOGGER = logging.getLogger()

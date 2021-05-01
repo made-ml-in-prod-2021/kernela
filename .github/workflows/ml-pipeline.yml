@@ -28,13 +28,15 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements*.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-            ${{ runner.os }}-
       - name: Install dependencies
-        if: steps.pip-cache.outputs.cache-hit != 'true'
         run: |
-          if [ -f requirements.dev.txt ]; 
-            then pip install -r requirements.dev.txt;
-          fi
+          pip install wheel~=0.36
+          pip install -r requirements.dev.txt
       - name: Test with pytest
         run: |
           python -m pytest ./tests
+
+      - name: Lint with pylint
+        run: |
+          pylint --exit-zero heat_diss
+          pylint --exit-zero config.py generate_report.py predict.py train_test_split.py train.py utils.py

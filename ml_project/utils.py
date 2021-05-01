@@ -17,5 +17,5 @@ def get_class_type(fully_qualified_name: str):
         module_path, class_name = fully_qualified_name.rsplit(".", 1)
         module = import_module(module_path)
         return getattr(module, class_name)
-    except (ImportError, AttributeError) as e:
+    except (ImportError, AttributeError):
         raise ImportError(fully_qualified_name)
