@@ -1,5 +1,7 @@
+# @package _group_
 train_size: 0.8
 path_zip: ./data/data.zip
-out_dir: ./data/train-test
+out_path_test: ./data/train-test/train.csv
+out_path_train: ./data/train-test/test.csv
 random_state: 43
 target_variable: target

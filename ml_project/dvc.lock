@@ -15,52 +15,52 @@ generate-report:
     md5: 72d869c103db67acd274f257eb8d8179
     size: 1985565
 train-log-reg:
-  cmd: python ./train.py -cd ./configs/train cls_config=log_reg
+  cmd: python ./train.py -cd ./configs/train -cn train_log_reg
   deps:
   - path: ./config.py
-    md5: 75f64d016df6c8e39378f4f0f6d03535
-    size: 1687
-  - path: ./configs/train/cls_config/log_reg.yaml
-    md5: 9c1c4c443a4a753e5aab54eecb523675
-    size: 93
-  - path: ./data/data.zip
-    md5: fd05c5ac78ac6c6b4671edf064738c95
-    size: 3478
+    md5: acc1eca89a2f8902c68e41505a024dda
+    size: 1560
+  - path: ./configs/train/train_log_reg.yaml
+    md5: b24688521ce9fb378ca393c0456c7faf
+    size: 1157
   - path: ./data/train-test
-    md5: d39e967181268883e2bc5908b9e15b4e.dir
-    size: 11666
+    md5: 4213da276d20dae9174d6ad89860c1f3.dir
+    size: 18538
     nfiles: 2
   - path: ./heat_diss
     md5: 15e6855579fa1f6e548c43c924c5fd4b.dir
     size: 11105
     nfiles: 13
   - path: ./train.py
-    md5: 937db05d99ffe0a35aedca106b63c2e6
-    size: 4083
+    md5: f41ea592213d855a03f606b1bee8e447
+    size: 4390
   outs:
-  - path: ./data/train/log_reg_metrics.json
-    md5: 800b75475d32697bcbcbc9f18c452563
+  - path: ./data/train/log_reg/conf_matrix.csv
+    md5: 29928e8b58a832d79b6077baf9c119b3
+    size: 1223
+  - path: ./data/train/log_reg/log_reg_metrics.json
+    md5: 4567ed73fe60dcdf7775e3c402a6dbb9
     size: 31
-  - path: ./data/train/model.pickle
-    md5: 8e3a74b9796645aa914fcb91b8181ce5
-    size: 2961
+  - path: ./data/train/log_reg/model.pickle
+    md5: ad75cab8a19aabf56bef14de31246a47
+    size: 2954
 train-test-split:
   cmd: python ./train_test_split.py -cd ./configs/train_test_split
   deps:
   - path: ./config.py
-    md5: 75f64d016df6c8e39378f4f0f6d03535
-    size: 1687
+    md5: acc1eca89a2f8902c68e41505a024dda
+    size: 1560
   - path: ./configs/train_test_split/train_test_split.yaml
-    md5: 1fce5e0dd61bcecf31c950490e3191f0
-    size: 115
+    md5: d33e7e5cfe3f6b28cc0eec7f64d687cd
+    size: 195
   - path: ./data/data.zip
     md5: fd05c5ac78ac6c6b4671edf064738c95
     size: 3478
   - path: ./train_test_split.py
-    md5: 27d7691fdc4a4950f730d545bd85fa31
-    size: 1159
+    md5: 5e8a092b65d10ea4f9b297d2d6531fe7
+    size: 1321
   outs:
   - path: ./data/train-test
-    md5: d39e967181268883e2bc5908b9e15b4e.dir
-    size: 11666
+    md5: 4213da276d20dae9174d6ad89860c1f3.dir
+    size: 18538
     nfiles: 2

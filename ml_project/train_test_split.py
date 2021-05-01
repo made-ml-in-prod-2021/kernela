@@ -26,12 +26,17 @@ def main(config: TrainTestSplitConfig):
     logger.info("Train size: %s", x_train.shape)
     logger.info("Test size: %s", x_test.shape)
 
-    out_dir = orig_wd / config.out_dir
-    out_dir.mkdir(exist_ok=True, parents=True)
+    out_train = orig_wd / config.out_path_train
+    out_train.parent.mkdir(exist_ok=True, parents=True)
 
-    logger.info("Save train test %s", out_dir)
-    x_train.to_csv(out_dir / "train.csv", index=False)
-    x_test.to_csv(out_dir / "test.csv", index=False)
+    logger.info("Save train to %s", out_train.parent)
+    x_train.to_csv(out_train, index=False)
+
+    out_test = orig_wd / config.out_path_test
+    out_test.parent.mkdir(exist_ok=True, parents=True)
+
+    logger.info("Save test to %s", out_test.parent)
+    x_train.to_csv(out_test, index=False)
 
 
 if __name__ == "__main__":

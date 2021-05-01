@@ -1,4 +1,5 @@
 # @package _group_
-C: 2
-max_iter: 100
 classname: sklearn.svm.SVC
+params:
+  C: 2
+  max_iter: 100

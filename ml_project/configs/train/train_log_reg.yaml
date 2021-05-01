@@ -1,11 +1,15 @@
-defaults:
-  - cls_config: log_reg
-
+# @package _group_
 cross_val:
   cv: 3
-  scores: [accuracy, f1]
-output_metric: ./data/train/log_reg_metrics.json
-model_path: ./data/train/model.pickle
+  cross_val_method: predict
+  conf_matrix_metric_path: ./data/train/log_reg/conf_matrix.csv
+cls_config:
+  classname: sklearn.linear_model.LogisticRegression
+  params:
+    C: 2
+    max_iter: 100
+output_metric: ./data/train/log_reg/log_reg_metrics.json
+model_path: ./data/train/log_reg/model.pickle
 data_config:
   path_to_train: ./data/train-test/train.csv
   path_to_test: ./data/train-test/test.csv

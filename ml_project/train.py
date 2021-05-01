@@ -1,6 +1,7 @@
 import os
 import json
 import logging
+import pathlib
 
 import hydra
 from hydra.core.config_store import ConfigStore
@@ -9,47 +10,48 @@ from sklearn import model_selection, metrics
 import pandas as pd
 
 from heat_diss.preprocessing import feature_target_split, clean_data
-from config import CrossValConfig, \
-    FeatureTransformerConfig, TrainConfig, \
-    LogisticRegressionConfig, SVCConfig
+from config import ClsConfog, CrossValConfig, \
+    FeatureTransformerConfig, TrainConfig
+
 from utils import get_class_type, dump_pickle
 
 LOGGER = logging.getLogger()
 
 
 cs = ConfigStore().instance()
-cs.store(group="cls_config", name="svc", node=SVCConfig)
-cs.store(group="cls_config", name="log_reg", node=LogisticRegressionConfig)
+cs.store(name="cls_config", node=ClsConfog)
 cs.store(name="feature_transform", node=FeatureTransformerConfig)
 cs.store(name="cross_val", node=CrossValConfig)
 cs.store(name="train", node=TrainConfig)
 
 
-def prepare_date(data: pd.DataFrame, uniq_values_limit: int, target_variable: str):
+def prepare_date(data: pd.DataFrame, uniq_values_limit: int,
+                 target_variable: str):
     data = clean_data(data, uniq_values_limit)
     return feature_target_split(data, target_variable)
 
 
-def cross_val(cls_pipeline, data: pd.DataFrame, cfg: TrainConfig):
+def cross_val(cls_pipeline, data: pd.DataFrame, cfg: TrainConfig,  metric_path: str):
     features, target = prepare_date(data,
                                     cfg.data_config.unique_values_limit,
                                     cfg.data_config.target_variable)
 
-    cross_val_score = model_selection.cross_validate(cls_pipeline, features, target,
-                                                     scoring=list(cfg.cross_val.scores),
-                                                     cv=cfg.cross_val.cv)
+    predicted_classes = model_selection.cross_val_predict(
+        cls_pipeline, features, target, cv=cfg.cross_val.cv, method=cfg.cross_val.cross_val_method)
 
-    val_score = pd.DataFrame(cross_val_score)
-    LOGGER.info("Cross validation results:\n%s", val_score)
+    predicted_classes = pd.DataFrame(data={"actual": target, "predicted": predicted_classes})
+    LOGGER.info("Cross validation results:\n%s", predicted_classes.head())
+    predicted_classes.to_csv(metric_path, index=False)
 
 
-@hydra.main(config_name="train")
+@ hydra.main(config_name="train")
 def train(cfg: TrainConfig):
     column_transformers = compose.ColumnTransformer([(transform.stage_name,
-                                                      get_class_type(transform.classname)(**transform.params), pd.Index(transform.columns))
+                                                      get_class_type(transform.classname)(
+                                                          **transform.params),
+                                                      pd.Index(transform.columns))
                                                      for transform in cfg.feature_transform.transformers], remainder="drop")
-    cls_params = dict(cfg.cls_config)
-    cls_params.pop("classname")
+    cls_params = dict(cfg.cls_config.params)
     cls = get_class_type(cfg.cls_config.classname)(**cls_params)
 
     cls_pipeline = pipeline.Pipeline([
@@ -67,7 +69,12 @@ def train(cfg: TrainConfig):
 
     union_data = train_data.append(test_data)
 
-    cross_val(cls_pipeline, union_data, cfg)
+    cross_val_conf_matrix = pathlib.Path(hydra.utils.get_original_cwd(),
+                                         cfg.cross_val.conf_matrix_metric_path)
+
+    cross_val_conf_matrix.parent.mkdir(exist_ok=True, parents=True)
+
+    cross_val(cls_pipeline, union_data, cfg, str(cross_val_conf_matrix))
 
     del union_data
 
@@ -98,7 +105,7 @@ def train(cfg: TrainConfig):
         metric = {"ROC AUC": roc_auc_score}
         json.dump(metric, file)
 
-    model_path = os.path.join(hydra.utils.get_original_cwd(), cfg.model_path)
+    model_path = pathlib.Path(hydra.utils.get_original_cwd(), cfg.model_path)
 
     LOGGER.info("Save trained model to %s", model_path)
 

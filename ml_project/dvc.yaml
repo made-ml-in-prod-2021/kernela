@@ -10,18 +10,18 @@ stages:
           cache: false
           persist: true
   train-log-reg:
-    cmd: python ./train.py -cd ./configs/train cls_config=log_reg
+    cmd: python ./train.py -cd ./configs/train -cn train_log_reg
     deps:
       - ./config.py
-      - ./configs/train/cls_config/log_reg.yaml
-      - ./data/data.zip
       - ./heat_diss
       - ./train.py
       - ./data/train-test
+      - ./configs/train/train_log_reg.yaml
     metrics:
-      - ./data/train/log_reg_metrics.json
+      - ./data/train/log_reg/log_reg_metrics.json
+      - ./data/train/log_reg/conf_matrix.csv
     outs:
-      - ./data/train/model.pickle
+      - ./data/train/log_reg/model.pickle
   train-test-split:
     cmd: python ./train_test_split.py -cd ./configs/train_test_split
     deps:
@@ -31,3 +31,13 @@ stages:
       - ./train_test_split.py
     outs:
       - ./data/train-test
+  log-reg-predict:
+    cmd: python ./predict.py -cd ./configs -cn ./predict_log_reg
+    deps:
+      - ./predict.py
+      - ./config.py
+      - ./configs/predict_log_reg.yaml
+      - ./data/train/log_reg/model.pickle
+      - ./data/train-test
+    outs:
+      - ./data/test-prediction/prediction.csv

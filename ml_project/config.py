@@ -1,14 +1,7 @@
 from dataclasses import dataclass
 from typing import Any, List
-from enum import Enum, auto
 
 from omegaconf import MISSING
-
-
-class FeatureType(Enum):
-    BINARY = auto()
-    CATEGORICAL = auto()
-    NUMERIC = auto()
 
 
 @dataclass
@@ -22,16 +15,16 @@ class TrainTestSplitConfig:
     target_variable: str = MISSING
     train_size: float = MISSING
     path_zip: str = MISSING
-    out_dir: str = MISSING
+    out_path_train: str = MISSING
+    out_path_test: str = MISSING
     random_state: int = MISSING
 
 
 @dataclass
 class CrossValConfig:
-    random_state: int = MISSING
     cv: int = MISSING
-    scores: List[str] = MISSING
-    refit_score: str = MISSING
+    conf_matrix_metric_path: str = MISSING
+    cross_val_method: str = MISSING
 
 
 @dataclass
@@ -45,18 +38,7 @@ class TransformerConfig:
 @dataclass
 class ClsConfog:
     classname: str = MISSING
-
-
-@dataclass
-class LogisticRegressionConfig(ClsConfog):
-    C: float = MISSING
-    max_iter: int = MISSING
-
-
-@dataclass
-class SVCConfig(ClsConfog):
-    C: float = MISSING
-    max_iter: int = MISSING
+    params: Any = MISSING
 
 
 @dataclass
@@ -80,3 +62,10 @@ class TrainConfig:
     feature_transform: FeatureTransformerConfig = MISSING
     data_config: DataConfig = MISSING
     output_metric: str = MISSING
+
+
+@dataclass
+class PredictConfig:
+    train_test_split: TrainTestSplitConfig = MISSING
+    train: TrainConfig = MISSING
+    out_prediction: str = MISSING
