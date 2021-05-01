@@ -5,3 +5,4 @@ output_image: ./data/train/log_reg/conf_matrix.png
 actual_col: actual
 predicted_col: predicted
 normalize: "all"
+dpi: 200

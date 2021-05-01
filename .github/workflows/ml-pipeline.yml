@@ -52,10 +52,9 @@ jobs:
           # Report metrics
           echo "## Матрица ошибок" >> report.md
 
-          # Publish confusion matrix diff
-          dvc plots show ./data/train/log_reg/conf_matrix.csv --template confusion -y actual -x predicted --show-vega > vega.json
-          vl2png vega.json -s 1.5 | cml-publish --md >> report.md
-
-          cat ./report.md
+          # Publish confusion matrix 
+          dvc repro log-reg-plot-conf-matrix
+          cml-publish ./data/train/log_reg/conf_matrix.png --md >> report.md
+          cml-send-comment ./report.md 
 
 

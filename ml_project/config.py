@@ -80,6 +80,6 @@ class PlotConfMatrixConfig:
     normalize: str = MISSING
     cmap: str = "summer_r"
     interpolation: str = "none"
-    title: str = "Confusion matrix"
+    title: str = "Cross validation confusion matrix"
     fromat_str: str = "{0:.4f}"
     dpi: int = 300
