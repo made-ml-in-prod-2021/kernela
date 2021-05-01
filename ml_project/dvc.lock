@@ -12,8 +12,8 @@ generate-report:
     size: 743
   outs:
   - path: ./data/report/eda.html
-    md5: 2cd0d5b5a88da812cd69e3b9c7f1dcab
-    size: 1985397
+    md5: a86ad300ef2a5294806f77124f9da302
+    size: 1985828
 train-log-reg:
   cmd: python ./train.py -cd ./configs/train -cn train_log_reg
   deps:
@@ -132,7 +132,7 @@ train-svc:
     md5: 766ded95a3e2186abc795b861061ce2b
     size: 1223
   - path: ./data/train/svc/model.pickle
-    md5: 95b8b1f8f0d17025e4aa4e7e1d6417e3
+    md5: 5d1f581b4e73bde1905c1d775656ed19
     size: 31197
   - path: ./data/train/svc/svc_metrics.json
     md5: 0237d5e4e810b4d4089a8ac5f1d4dfd4
