@@ -12,8 +12,8 @@ generate-report:
     size: 743
   outs:
   - path: ./data/report/eda.html
-    md5: 72d869c103db67acd274f257eb8d8179
-    size: 1985565
+    md5: 2cd0d5b5a88da812cd69e3b9c7f1dcab
+    size: 1985397
 train-log-reg:
   cmd: python ./train.py -cd ./configs/train -cn train_log_reg
   deps:
@@ -28,12 +28,12 @@ train-log-reg:
     size: 18538
     nfiles: 2
   - path: ./heat_diss
-    md5: 15e6855579fa1f6e548c43c924c5fd4b.dir
-    size: 11105
+    md5: 2c9d50bfdbadc56f2179b091cd0009d6.dir
+    size: 10936
     nfiles: 13
   - path: ./train.py
-    md5: f41ea592213d855a03f606b1bee8e447
-    size: 4390
+    md5: 82c27e1870ddab3e4a3c51c5a5c653f5
+    size: 4388
   outs:
   - path: ./data/train/log_reg/conf_matrix.csv
     md5: 29928e8b58a832d79b6077baf9c119b3
@@ -64,3 +64,26 @@ train-test-split:
     md5: 4213da276d20dae9174d6ad89860c1f3.dir
     size: 18538
     nfiles: 2
+log-reg-predict:
+  cmd: python ./predict.py -cd ./configs -cn ./predict_log_reg
+  deps:
+  - path: ./config.py
+    md5: acc1eca89a2f8902c68e41505a024dda
+    size: 1560
+  - path: ./configs/predict_log_reg.yaml
+    md5: d5e9bd7e5ce8049e9ec524cf3f61d0eb
+    size: 134
+  - path: ./data/train-test
+    md5: 4213da276d20dae9174d6ad89860c1f3.dir
+    size: 18538
+    nfiles: 2
+  - path: ./data/train/log_reg/model.pickle
+    md5: ad75cab8a19aabf56bef14de31246a47
+    size: 2954
+  - path: ./predict.py
+    md5: 8dc2c9851662457e9875a28bd5d0f2c8
+    size: 1376
+  outs:
+  - path: ./data/test-prediction/prediction.csv
+    md5: 0c44a90ad58ada36cce8290a85e53f20
+    size: 9763

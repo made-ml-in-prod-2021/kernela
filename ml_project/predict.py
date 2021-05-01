@@ -36,6 +36,7 @@ def main(cfg: PredictConfig):
     predicted_classes = model.predict(test_features)
 
     out_pred = orig_wd / cfg.out_prediction
+    out_pred.parent.mkdir(exist_ok=True, parents=True)
 
     logger.info("Save predictions to %s", out_pred)
 
