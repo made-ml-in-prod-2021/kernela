@@ -8,11 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  homework1:
+  build:
     runs-on: ubuntu-20.04
-    defaults:
-      run:
-        working-directory: ./ml_project
 
     steps:
       - uses: actions/checkout@v2
