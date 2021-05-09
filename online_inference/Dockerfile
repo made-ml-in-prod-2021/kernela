@@ -31,6 +31,7 @@ COPY ./entrypoint.sh ./
 RUN chmod u+x ./entrypoint.sh
 
 ENV APP_PORT=8000
+
 ENV LOG_LEVEL=info
 
 ENTRYPOINT [ "./entrypoint.sh" ]
