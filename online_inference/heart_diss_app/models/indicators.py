@@ -1,4 +1,5 @@
-from pydantic import BaseModel, conint, confloat
+from typing import List
+from pydantic import BaseModel, conint, confloat, Field
 
 
 class Indicators(BaseModel):
@@ -34,3 +35,7 @@ class Indicators(BaseModel):
                 "thal": 2
             }
         }
+
+
+class Features(BaseModel):
+    features: List[Indicators] = Field(min_items=1)

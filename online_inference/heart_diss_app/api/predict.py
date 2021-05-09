@@ -1,12 +1,17 @@
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Request, Depends
 
-from ..models import Prediction, Indicators
+from ..models import Prediction, Features
+from ..predictor import HeartDissPredictor
 
 predict_router = APIRouter()
 
 
-@predict_router.post("/predict/", response_model=Prediction)
-async def predict(indicators: List[Indicators]):
-    return Prediction(heart_disease=True)
+def get_model(request: Request):
+    return request.state.model
+
+
+@predict_router.post("/predict", response_model=List[Prediction])
+async def predict(features: Features, model: HeartDissPredictor = Depends(get_model)):
+    return model.predict(features)

@@ -1,2 +1,2 @@
-from .indicators import Indicators
+from .indicators import Indicators, Features
 from .prediction import Prediction
