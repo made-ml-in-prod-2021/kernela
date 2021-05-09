@@ -16,6 +16,11 @@ pip install -r requirements.txt
 pip install -r requirements.dev.txt
 ```
 
+Скачать данные из LFS:
+```
+git lfs pull
+```
+
 ### Исследовательский анализа данных
 
 Для получения отчёта в формате html:
