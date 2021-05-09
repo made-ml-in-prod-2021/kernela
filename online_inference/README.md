@@ -26,7 +26,7 @@ docker build -t kernela/hear-diss-app:latest .
 
 #### Загрузка c Docker Hub
 
-Загрузить [образ с Docker Hub](https://hub.docker.com/repository/docker/kernela/hear-diss-app)
+Загрузить [образ с Docker Hub](https://hub.docker.com/r/kernela/hear-diss-app)
 
 ```
 docker pull kernela/hear-diss-app:latest
@@ -82,3 +82,6 @@ python ./requester.py --port 8000
 3. Использование `.dockerignore`. Это аналог `.gitignore`, но для Docker. Позволяет не копировать лишние промежуточные файлы такие как кеши, файлы от тестов и т. п. при копировании целых директорий.
 4. Объединение команд в цепочку. Выполнение команду в рамках одной `RUN` инструкции помогает избавиться от лишних слоёв в финальном образе. Особенно, когда создаются промежуточные файлы при выполнении разных команд.
 
+Если не аккуратно писать, то можно сделать образ на 1.39GB.
+
+Финальный образ получился на 525MB.
