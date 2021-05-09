@@ -1,6 +1,5 @@
 import argparse
 import csv
-import json
 from urllib import parse
 
 import requests
@@ -38,12 +37,12 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--host", type=str, required=True, help="A host of server")
+    parser.add_argument("--host", type=str, default="localhost", help="A host of server")
     parser.add_argument("--port", type=int, required=True, help="A port of server")
-    parser.add_argument("--test_csv", type=str, required=True, help="A path to csv with test data")
+    parser.add_argument("--test_csv", type=str, default="./test_data/test.csv", help="A path to csv with test data")
     parser.add_argument("--num_examples", type=int, default=None,
                         help="A number of lines to test from csv")
-    parser.add_argument("--url", type=int, default="/predict",
+    parser.add_argument("--url", type=str, default="/predict",
                         help="An URL of API")
     parser.add_argument("--target", type=str, default="target")
 

@@ -22,6 +22,7 @@ COPY ./setup.py ./requirements.txt ./
 
 RUN pip install wheel~=0.36 && \
     pip install . && \
+    python ./setup.py clean -a && \
     rm -r ./heart_diss_app && \
     rm ./setup.py ./requirements.txt
 
