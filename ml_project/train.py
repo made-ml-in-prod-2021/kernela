@@ -1,4 +1,3 @@
-import os
 import json
 import logging
 import pathlib
@@ -58,10 +57,10 @@ def train(cfg: TrainConfig):
         ("cls", cls)
     ])
 
-    train_path = os.path.join(hydra.utils.get_original_cwd(), cfg.data_config.path_to_train)
+    train_path = pathlib.Path(hydra.utils.get_original_cwd(), cfg.data_config.path_to_train)
     train_data = pd.read_csv(train_path)
 
-    test_path = os.path.join(hydra.utils.get_original_cwd(), cfg.data_config.path_to_test)
+    test_path = pathlib.Path(hydra.utils.get_original_cwd(), cfg.data_config.path_to_test)
     test_data = pd.read_csv(test_path)
 
     LOGGER.info("Union all data and perform cross validation")
@@ -93,12 +92,12 @@ def train(cfg: TrainConfig):
 
     roc_auc_score = metrics.roc_auc_score(test_target, predicted_proba)
 
-    metric_path = os.path.join(hydra.utils.get_original_cwd(), cfg.output_metric)
+    metric_path = pathlib.Path(hydra.utils.get_original_cwd(), cfg.output_metric)
 
     LOGGER.info("ROC AUC score: %f", roc_auc_score)
     LOGGER.info("Save metric to %s", metric_path)
 
-    os.makedirs(os.path.dirname(metric_path), exist_ok=True)
+    metric_path.parent.mkdir(exist_ok=True, parents=True)
 
     with open(metric_path, "w", encoding="utf-8") as file:
         metric = {"ROC AUC": roc_auc_score}

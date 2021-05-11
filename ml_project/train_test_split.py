@@ -18,7 +18,7 @@ def main(config: TrainTestSplitConfig):
     data = pd.read_csv(zip_file)
 
     x_train, x_test = model_selection.train_test_split(
-        data, train_size=config.train_size, random_state=config.random_state)
+        data, **config.split_params)
 
     logger.info("Train distr:\n%s", x_train[config.target_variable].value_counts(normalize=True))
     logger.info("Test distr:\n%s", x_test[config.target_variable].value_counts(normalize=True))

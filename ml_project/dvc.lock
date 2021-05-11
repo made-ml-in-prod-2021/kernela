@@ -18,8 +18,8 @@ train-log-reg:
   cmd: python ./train.py -cd ./configs/train -cn train_log_reg
   deps:
   - path: ./config.py
-    md5: 98735685c2fb2f71b52eb3b5783883a9
-    size: 1990
+    md5: 732a99e71dd88a76767fdf768f3deaee
+    size: 2075
   - path: ./configs/train/train_log_reg.yaml
     md5: b24688521ce9fb378ca393c0456c7faf
     size: 1157
@@ -32,8 +32,8 @@ train-log-reg:
     size: 10936
     nfiles: 13
   - path: ./train.py
-    md5: 82c27e1870ddab3e4a3c51c5a5c653f5
-    size: 4388
+    md5: e7e953b743a00eed64d6964167a2457f
+    size: 4374
   outs:
   - path: ./data/train/log_reg/conf_matrix.csv
     md5: 29928e8b58a832d79b6077baf9c119b3
@@ -48,17 +48,17 @@ train-test-split:
   cmd: python ./train_test_split.py -cd ./configs/train_test_split
   deps:
   - path: ./config.py
-    md5: 98735685c2fb2f71b52eb3b5783883a9
-    size: 1990
+    md5: 732a99e71dd88a76767fdf768f3deaee
+    size: 2075
   - path: ./configs/train_test_split/train_test_split.yaml
-    md5: d33e7e5cfe3f6b28cc0eec7f64d687cd
-    size: 195
+    md5: 47e110548450ab2f8fdd16b9cf9c7eda
+    size: 214
   - path: ./data/data.zip
     md5: fd05c5ac78ac6c6b4671edf064738c95
     size: 3478
   - path: ./train_test_split.py
-    md5: 5e8a092b65d10ea4f9b297d2d6531fe7
-    size: 1321
+    md5: 743faba9c09ac300530bb0809547a40c
+    size: 1280
   outs:
   - path: ./data/train-test
     md5: 4213da276d20dae9174d6ad89860c1f3.dir
@@ -68,8 +68,8 @@ log-reg-predict:
   cmd: python ./predict.py -cd ./configs -cn ./predict_log_reg
   deps:
   - path: ./config.py
-    md5: 98735685c2fb2f71b52eb3b5783883a9
-    size: 1990
+    md5: 732a99e71dd88a76767fdf768f3deaee
+    size: 2075
   - path: ./configs/predict_log_reg.yaml
     md5: d5e9bd7e5ce8049e9ec524cf3f61d0eb
     size: 134
@@ -92,8 +92,8 @@ log-reg-plot-conf-matrix:
     matrix"
   deps:
   - path: ./config.py
-    md5: 98735685c2fb2f71b52eb3b5783883a9
-    size: 1990
+    md5: 732a99e71dd88a76767fdf768f3deaee
+    size: 2075
   - path: ./configs/plot_conf_matrix.yaml
     md5: a2c9d4e8a95763fb16890989f0495aa2
     size: 165
@@ -111,8 +111,8 @@ train-svc:
   cmd: python ./train.py -cd ./configs/train -cn train_svc
   deps:
   - path: ./config.py
-    md5: 98735685c2fb2f71b52eb3b5783883a9
-    size: 1990
+    md5: 732a99e71dd88a76767fdf768f3deaee
+    size: 2075
   - path: ./configs/train/train_svc.yaml
     md5: 486507320181675e1ee85ec6cfe9fcae
     size: 1140
@@ -125,14 +125,14 @@ train-svc:
     size: 10936
     nfiles: 13
   - path: ./train.py
-    md5: 82c27e1870ddab3e4a3c51c5a5c653f5
-    size: 4388
+    md5: e7e953b743a00eed64d6964167a2457f
+    size: 4374
   outs:
   - path: ./data/train/svc/conf_matrix.csv
     md5: 766ded95a3e2186abc795b861061ce2b
     size: 1223
   - path: ./data/train/svc/model.pickle
-    md5: 5d1f581b4e73bde1905c1d775656ed19
+    md5: 101a4d931e5eba8a3580847e7a12ebae
     size: 31197
   - path: ./data/train/svc/svc_metrics.json
     md5: 0237d5e4e810b4d4089a8ac5f1d4dfd4
@@ -142,8 +142,8 @@ svc-plot-conf-matrix:
     matrix" output_image=./data/train/svc/conf_matrix.png
   deps:
   - path: ./config.py
-    md5: 98735685c2fb2f71b52eb3b5783883a9
-    size: 1990
+    md5: 732a99e71dd88a76767fdf768f3deaee
+    size: 2075
   - path: ./configs/plot_conf_matrix.yaml
     md5: a2c9d4e8a95763fb16890989f0495aa2
     size: 165
