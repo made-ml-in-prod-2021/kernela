@@ -9,15 +9,18 @@ class ReportConfig:
     input_zip: str = MISSING
     output_report: str = MISSING
 
+@dataclass
+class RandomSplitParams:
+    random_state: int = MISSING
+    train_size: float = MISSING
 
 @dataclass
 class TrainTestSplitConfig:
     target_variable: str = MISSING
-    train_size: float = MISSING
     path_zip: str = MISSING
     out_path_train: str = MISSING
     out_path_test: str = MISSING
-    random_state: int = MISSING
+    split_params: RandomSplitParams = MISSING
 
 
 @dataclass
