@@ -1,0 +1,5 @@
+defaults:
+  - train: train_log_reg
+  - train_test_split: train_test_split
+
+out_prediction: ./data/test-prediction/prediction.csv

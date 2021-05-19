@@ -1,0 +1,5 @@
+-r ./requirements.txt
+autopep8~=1.5
+pylint~=2.8
+pytest~=6.2
+Faker~=8.1
