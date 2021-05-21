@@ -1,0 +1,12 @@
+version: '3.5'
+
+
+services:
+    web-app:
+      image: kernela/hear-diss-app:latest
+      build: .
+      environment: 
+        MODEL_PATH: /home/models/svc/svc.pickle
+        LOG_LEVEL: info
+      ports:
+        - "${APP_PORT:-8000}:8000"
