@@ -55,6 +55,15 @@ with DAG(
                            volumes=[f"{HOST_DATA_DIR}:/data"]
                            )
 
+    metric_path = "/data/metric/{{ ds }}/conf_matrix.txt"
+
+    validate = DockerOperator(image="airflow-validate",
+                              command=f"--valid_dir {train_test_dir}/test --model_path {model_path} --metric_file {metric_path}",
+                              task_id="train",
+                              do_xcom_push=False,
+                              volumes=[f"{HOST_DATA_DIR}:/data"]
+                              )
+
     # preprocess = DockerOperator(
     #     image="mikhailmar/airflow-preprocess",
     #     command="--input-dir /data/raw/{{ ds }} --output-dir /data/processed/{{ ds }}",

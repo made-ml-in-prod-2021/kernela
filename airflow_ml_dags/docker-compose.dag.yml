@@ -24,7 +24,7 @@ services:
   validate:
     build:
       context: images/airflow-validate
-      image: airflow-validate
+    image: airflow-validate
 
   split:
     build:
