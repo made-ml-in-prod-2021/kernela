@@ -2,6 +2,6 @@ FROM airflow-ml-base:latest
 
 WORKDIR /home
 
-COPY ./download.py ./download.py
+COPY ./split.py ./
 
-ENTRYPOINT [ "python", "./download.py" ] 
+ENTRYPOINT [ "python", "./split.py" ] 

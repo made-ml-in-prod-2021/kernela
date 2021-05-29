@@ -18,20 +18,29 @@ with DAG(
         schedule_interval="@daily",
         start_date=datetime.now()) as dag:
 
+    data_dir = "/data/raw/{{ ds }}"
+
     download = DockerOperator(
         image="airflow-download",
-        command="--out_dir /data/raw/{{ ds }}",
+        command=f"--out_dir {data_dir}",
         task_id="download-data",
         do_xcom_push=False,
         volumes=[f"{HOST_DATA_DIR}:/data"]
     )
 
     eda_anlysis = DockerOperator(image="airflow-eda",
-                                 comamnd="--report_dir /data/eda/{{ds}} --input_path /data/raw/{{ ds }}/data.csv",
+                                 comamnd=f"--report_dir /data/eda/{{ds}} --input_path {data_dir}/data.csv",
                                  task_id="eda",
                                  do_xcom_push=False,
                                  volumes=[f"{HOST_DATA_DIR}:/data"]
                                  )
+
+    split = DockerOperator(image="airflow-split",
+                           comamnd=f"--input_dir {data_dir} --input_path /data/raw/{{ ds }}/data.csv",
+                           task_id="eda",
+                           do_xcom_push=False,
+                           volumes=[f"{HOST_DATA_DIR}:/data"]
+                           )
 
     # preprocess = DockerOperator(
     #     image="mikhailmar/airflow-preprocess",

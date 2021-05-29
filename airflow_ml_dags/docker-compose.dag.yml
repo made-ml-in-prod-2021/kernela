@@ -16,6 +16,16 @@ services:
       context: images/airflow-download
     image: airflow-download
 
+  eda:
+    build:
+      context: images/airflow-eda
+    image: airflow-eda
+
+  split:
+    build:
+      context: images/airflow-split
+    image: airflow-split
+
   preprocess:
     build:
       context: images/airflow-preprocess
