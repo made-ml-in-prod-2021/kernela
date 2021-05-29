@@ -139,6 +139,8 @@ jobs:
     defaults:
       run:
         working-directory: ./airflow_ml_dags
+    env:
+      IMAGE_HOME_DIR: ./airflow_ml_dags/images
 
     steps:
       - uses: actions/checkout@v2
@@ -164,10 +166,86 @@ jobs:
           pip install -r ./images/airflow-eda/requirements.txt
       - name: Test with pytest
         run: |
-          for dir in ./images/*
+          for dir in ./images/airflow-download ./images/airflow-eda ./images/airflow-split
           do
             echo "Test inside $dir" 
-            pushd ./images/"$dir"
+            pushd "$dir"
             pytest .
             popd
           done
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Build airflow base image
+        uses: docker/build-push-action@v2
+        env:
+          IMAGE_DIR: airflow-docker
+        with:
+          push: false
+          builder: ${{ steps.buildx.outputs.name }}
+          context: ${{ env.IMAGE_HOME_DIR }}/${{ env.IMAGE_DIR }}
+          file: ${{ env.IMAGE_HOME_DIR }}/${{ env.IMAGE_DIR }}/Dockerfile
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          tags: ${{ env.IMAGE_DIR }}:latest
+
+      - name: Build base ml image
+        uses: docker/build-push-action@v2
+        env:
+          IMAGE_DIR: airflow-docker
+        with:
+          push: false
+          builder: ${{ steps.buildx.outputs.name }}
+          context: ${{ env.IMAGE_HOME_DIR }}/${{ env.IMAGE_DIR }}
+          file: ${{ env.IMAGE_HOME_DIR }}/${{ env.IMAGE_DIR }}/Dockerfile
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          tags: airflow-ml-base:latest
+
+      - name: Build download image
+        uses: docker/build-push-action@v2
+        env:
+          IMAGE_DIR: airflow-download
+        with:
+          push: false
+          builder: ${{ steps.buildx.outputs.name }}
+          context: ${{ env.IMAGE_HOME_DIR }}/${{ env.IMAGE_DIR }}
+          file: ${{ env.IMAGE_HOME_DIR }}/${{ env.IMAGE_DIR }}/Dockerfile
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          tags: ${{ env.IMAGE_DIR }}:latest
+
+      - name: Build eda image
+        uses: docker/build-push-action@v2
+        env:
+          IMAGE_DIR: airflow-eda
+        with:
+          push: false
+          builder: ${{ steps.buildx.outputs.name }}
+          context: ${{ env.IMAGE_HOME_DIR }}/${{ env.IMAGE_DIR }}
+          file: ${{ env.IMAGE_HOME_DIR }}/${{ env.IMAGE_DIR }}/Dockerfile
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          tags: ${{ env.IMAGE_DIR }}:latest
+
+      - name: Build split image
+        uses: docker/build-push-action@v2
+        env:
+          IMAGE_DIR: airflow-split
+        with:
+          push: false
+          builder: ${{ steps.buildx.outputs.name }}
+          context: ${{ env.IMAGE_HOME_DIR }}/${{ env.IMAGE_DIR }}
+          file: ${{ env.IMAGE_HOME_DIR }}/${{ env.IMAGE_DIR }}/Dockerfile
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          tags: ${{ env.IMAGE_DIR }}:latest

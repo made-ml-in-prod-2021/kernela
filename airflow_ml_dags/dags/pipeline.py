@@ -17,6 +17,7 @@ with DAG(
         default_args=default_args,
         schedule_interval="@daily",
         start_date=datetime.now()) as dag:
+
     download = DockerOperator(
         image="airflow-download",
         command="--out_dir /data/raw/{{ ds }}",
@@ -24,6 +25,13 @@ with DAG(
         do_xcom_push=False,
         volumes=[f"{HOST_DATA_DIR}:/data"]
     )
+
+    eda_anlysis = DockerOperator(image="airflow-eda",
+                                 comamnd="--report_dir /data/eda/{{ds}} --input_path /data/raw/{{ ds }}/data.csv",
+                                 task_id="eda",
+                                 do_xcom_push=False,
+                                 volumes=[f"{HOST_DATA_DIR}:/data"]
+                                 )
 
     # preprocess = DockerOperator(
     #     image="mikhailmar/airflow-preprocess",
@@ -43,4 +51,4 @@ with DAG(
     #         "/Users/mikhail.maryufich/PycharmProjects/airflow_examples/data:/data"]
     # )
 
-    download  # >> preprocess >> predict
+    download >> eda_anlysis
