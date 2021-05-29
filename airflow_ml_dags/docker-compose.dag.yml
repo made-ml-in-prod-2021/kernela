@@ -6,10 +6,10 @@ services:
       context: images/airflow-ml-base
     image: airflow-ml-base
 
-  predict:
+  train:
     build:
-      context: images/airflow-predict
-    image: airflow-predict
+      context: images/airflow-train
+    image: airflow-train
 
   download:
     build:

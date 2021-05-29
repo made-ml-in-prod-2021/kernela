@@ -11,7 +11,7 @@ from pandas_profiling import ProfileReport
 def report(input_path: str, report_dir: str):
     features = pd.read_csv(input_path, encoding="utf-8")
 
-    report = ProfileReport(features)
+    report = ProfileReport(features, minimal=True)
     repo_path = os.path.join(report_dir, "eda.html")
     os.makedirs(report_dir, exist_ok=True)
 
