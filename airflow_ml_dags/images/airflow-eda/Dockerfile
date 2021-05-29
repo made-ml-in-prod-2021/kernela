@@ -5,8 +5,10 @@ WORKDIR /home
 RUN apt update && \
     apt install gcc -y
 
-COPY ./eda.py ./requirements.txt ./
+COPY ./requirements.txt ./
 
-RUN pip install --no-cache -r ./requirements.txt
+RUN pip install --no-cache -r ./requirements.txt && rm ./requirements.txt
+
+COPY ./eda.py ./
 
 ENTRYPOINT [ "python", "./eda.py" ] 

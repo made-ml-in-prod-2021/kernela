@@ -2,6 +2,6 @@ FROM airflow-ml-base:latest
 
 WORKDIR /home
 
-COPY ./train.py ./train.py
+COPY ./train.py ./
 
 ENTRYPOINT ["python", "train.py"]

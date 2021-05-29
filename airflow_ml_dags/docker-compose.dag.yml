@@ -21,6 +21,11 @@ services:
       context: images/airflow-eda
     image: airflow-eda
 
+  validate:
+    build:
+      context: images/airflow-validate
+      image: airflow-validate
+
   split:
     build:
       context: images/airflow-split

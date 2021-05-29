@@ -8,7 +8,3 @@ RUN pip install --user --no-cache-dir \
 USER root
 
 ENV PYTHONPATH=/home/airflow/.local/lib/python3.7/site-packages
-
-COPY ./wait-it.sh ./
-
-RUN chmod u+x ./wait-it.sh

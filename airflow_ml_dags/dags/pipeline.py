@@ -49,7 +49,7 @@ with DAG(
     model_path = "/data/model/{{ ds }}/model.pickle"
 
     train = DockerOperator(image="airflow-train",
-                           command=f"--train_dir {train_test_dir} --model_path {model_path}",
+                           command=f"--train_dir {train_test_dir}/train --model_path {model_path}",
                            task_id="train",
                            do_xcom_push=False,
                            volumes=[f"{HOST_DATA_DIR}:/data"]
