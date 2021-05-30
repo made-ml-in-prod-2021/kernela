@@ -24,6 +24,7 @@ with DAG(
 
     download = DockerOperator(
         image="airflow-download",
+        auto_remove=True,
         command=f"--out_dir {data_dir}",
         task_id="download-data",
         do_xcom_push=False,

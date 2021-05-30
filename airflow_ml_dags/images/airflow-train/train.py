@@ -1,18 +1,36 @@
 import pathlib
 import pandas as pd
 import click
-import pickle
+import os
 
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 
+import mlflow
+
 
 @click.command()
 @ click.option("--train_dir")
-@ click.option("--model_path")
-@ click.option("--pickle_protocol", default=4, type=int)
-def train(train_dir: str, model_path: str, pickle_protocol: int):
+@ click.option("--exp_name", type=str, required=True)
+def mlflow_train(train_dir: str, exp_name: str):
+    mlflow.set_tracking_uri(os.environ["MLFLOW_TRACKING_URL"])
+
+    experiment = mlflow.get_experiment_by_name(exp_name)
+
+    if experiment is None:
+        experiment_id = mlflow.create_experiment(exp_name)
+        experiment = mlflow.get_experiment(experiment_id)
+
+    mlflow.set_experiment(experiment.name)
+
+    mlflow.sklearn.autolog()
+
+    with mlflow.start_run() as run:
+        pipeline = train(train_dir)
+
+
+def train(train_dir: str):
     train_datapath = pathlib.Path(train_dir) / "data.csv"
     target_datapath = train_datapath.parent / "target.csv"
 
@@ -24,13 +42,8 @@ def train(train_dir: str, model_path: str, pickle_protocol: int):
 
     pipeline.fit(features.to_numpy(), target.to_numpy().ravel())
 
-    path_to_model = pathlib.Path(model_path)
-
-    path_to_model.parent.mkdir(exist_ok=True, parents=True)
-
-    with open(path_to_model, "wb") as dump_file:
-        pickle.dump(pipeline, dump_file, protocol=pickle_protocol)
+    return pipeline
 
 
 if __name__ == '__main__':
-    train()
+    mlflow_train()

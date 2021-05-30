@@ -4,6 +4,7 @@ import click
 import pickle
 import numpy as np
 
+from airflow import airflow
 from sklearn import metrics
 
 
@@ -11,7 +12,7 @@ from sklearn import metrics
 @ click.option("--valid_dir")
 @ click.option("--model_path")
 @ click.option("--metric_file")
-def validate(valid_dir: str, model_path: str, metric_file: str):
+def validate(valid_dir: str, model_path: str):
     valid_datapath = pathlib.Path(valid_dir) / "data.csv"
     target_datapath = valid_datapath.parent / "target.csv"
 
