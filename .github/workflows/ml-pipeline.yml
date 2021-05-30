@@ -164,7 +164,7 @@ jobs:
           pip install -r ./images/airflow-eda/requirements.txt
       - name: Test with pytest
         run: |
-          for dir in ./images/airflow-download ./images/airflow-eda ./images/airflow-split ./images/airflow-train ./images/airflow-validate ./images/airflow-predict
+          for dir in ./images/airflow-download ./images/airflow-eda ./images/airflow-split ./images/airflow-train
           do
             echo "Test inside $dir" 
             pushd "$dir"

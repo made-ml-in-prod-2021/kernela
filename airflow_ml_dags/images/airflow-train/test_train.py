@@ -1,7 +1,5 @@
 import os
 
-import numpy as np
-from sklearn.pipeline import Pipeline
 import pandas as pd
 from log_reg import train
 

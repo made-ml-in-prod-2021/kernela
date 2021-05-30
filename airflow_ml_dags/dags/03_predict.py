@@ -4,7 +4,6 @@ from datetime import timedelta, datetime
 from airflow import DAG
 from airflow.sensors.external_task import ExternalTaskSensor
 from airflow.providers.docker.operators.docker import DockerOperator
-from airflow.models.variable import Variable
 
 default_args = {
     "owner": "airflow",
@@ -29,12 +28,23 @@ with DAG(
         execution_delta=timedelta(days=1),
         timeout=120)
 
+    mlflow_envs = dict()
+
+    for env_name in ("MLFLOW_TRACKING_URL", "MLFLOW_S3_ENDPOINT_URL",
+                     "AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY"):
+        mlflow_envs[env_name] = os.environ[env_name]
+
+    model_name = os.environ["MODEL_NAME"]
+
     predict = DockerOperator(image="airflow-predict",
                              command="--data_dir /data/raw/{{ ds }} \
-                                      --predict_path /data/predictions/{{ ds }}/predictions.csv \
-                                      --model_path {{ var.value.PROD_MODEL }}",
+                                      --predict_path /data/predictions/{{ ds }}/predictions.csv "
+                             f"--model_name  {model_name}",
                              task_id="predict",
                              do_xcom_push=False,
+                             auto_remove=True,
+                             network_mode="host",
+                             private_environment=mlflow_envs,
                              volumes=[f"{HOST_DATA_DIR}:/data"]
                              )
 

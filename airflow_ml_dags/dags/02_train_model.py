@@ -51,16 +51,15 @@ with DAG(
                            volumes=[f"{HOST_DATA_DIR}:/data"]
                            )
 
-    model_path = "/data/model/{{ ds }}/model.pickle"
-
     mlflow_envs = dict()
 
     for env_name in ("MLFLOW_TRACKING_URL", "MLFLOW_S3_ENDPOINT_URL", "AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY"):
         mlflow_envs[env_name] = os.environ[env_name]
 
+    model_name = os.environ["MODEL_NAME"]
+
     train = DockerOperator(image="airflow-train",
-                           command=f"--train_dir {train_test_dir}/train" +
-                           " --exp_name train-exp",
+                           command=f"--train_dir {train_test_dir}/train --exp_name train-exp --model_name {model_name}",
                            task_id="train",
                            do_xcom_push=False,
                            auto_remove=True,
@@ -69,15 +68,15 @@ with DAG(
                            volumes=[f"{HOST_DATA_DIR}:/data"]
                            )
 
-    metric_path = "/data/metric/{{ ds }}/conf_matrix.txt"
-
-    # validate = DockerOperator(image="airflow-validate",
-    #                           command=f"--valid_dir {train_test_dir}/test --model_path {model_path} --metric_file {metric_path}",
-    #                           task_id="validate",
-    #                           do_xcom_push=False,
-    #                           auto_remove=True,
-    #                           volumes=[f"{HOST_DATA_DIR}:/data"]
-    #                           )
+    validate = DockerOperator(image="airflow-validate",
+                              command=f"--valid_dir {train_test_dir}/test --model_name {model_name} --exp_name {model_name}-validate",
+                              task_id="validate",
+                              do_xcom_push=False,
+                              auto_remove=True,
+                              network_mode="host",
+                              private_environment=mlflow_envs,
+                              volumes=[f"{HOST_DATA_DIR}:/data"]
+                              )
 
     externalsensor >> [eda_anlysis, split]
-    split >> train  # >> validate
+    split >> train >> validate

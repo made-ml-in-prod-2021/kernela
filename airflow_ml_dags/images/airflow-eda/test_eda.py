@@ -7,7 +7,7 @@ from eda import report
 TEST_DATA = os.path.join("..", "test_data", "data.csv")
 
 
-def test_hello_world(tmpdir):
+def test_eda(tmpdir):
     out_dir = tmpdir.mkdir("report")
     runner = CliRunner()
     result = runner.invoke(

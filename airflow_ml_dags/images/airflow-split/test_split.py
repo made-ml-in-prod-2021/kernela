@@ -7,7 +7,7 @@ from split import split
 TEST_DIR = os.path.join("..", "test_data")
 
 
-def test_hello_world(tmpdir):
+def test_split(tmpdir):
     out_dir = tmpdir.mkdir("data")
     runner = CliRunner()
     result = runner.invoke(

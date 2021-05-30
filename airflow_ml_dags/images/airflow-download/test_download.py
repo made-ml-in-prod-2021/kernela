@@ -5,7 +5,7 @@ from click.testing import CliRunner
 from download import download
 
 
-def test_hello_world(tmpdir):
+def test_download(tmpdir):
     out_dir = tmpdir.mkdir("data")
     runner = CliRunner()
     result = runner.invoke(download, ["--out_dir", str(out_dir)])
