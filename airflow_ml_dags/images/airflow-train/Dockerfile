@@ -6,6 +6,6 @@ COPY ./requiremnets.txt ./
 
 RUN pip install --no-cache -r ./requiremnets.txt
 
-COPY ./train.py ./
+COPY ./train.py ./log_reg.py ./
 
 ENTRYPOINT ["python", "train.py"]
