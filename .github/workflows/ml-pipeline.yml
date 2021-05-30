@@ -164,7 +164,7 @@ jobs:
           pip install -r ./images/airflow-eda/requirements.txt
       - name: Test with pytest
         run: |
-          for dir in ./images/airflow-download ./images/airflow-eda ./images/airflow-split ./images/airflow-train ./images/airflow-validate
+          for dir in ./images/airflow-download ./images/airflow-eda ./images/airflow-split ./images/airflow-train ./images/airflow-validate ./images/airflow-predict
           do
             echo "Test inside $dir" 
             pushd "$dir"
@@ -172,7 +172,14 @@ jobs:
             popd
           done
 
-      - name: Build images
+      - name: Build pipelien images
         run: |
           export COMPOSE_DOCKER_CLI_BUILD=1
+          export DOCKER_BUILDKIT=1
           docker-compose -f ./docker-compose.dag.yml build
+
+      - name: Build airflow image
+        run: |
+          export COMPOSE_DOCKER_CLI_BUILD=1
+          export DOCKER_BUILDKIT=1
+          HOST_DATA_DIR=./tmp docker-compose build

@@ -2,12 +2,15 @@ import os
 from datetime import timedelta, datetime
 
 from airflow import DAG
+from airflow.sensors.external_task import ExternalTaskSensor
 from airflow.providers.docker.operators.docker import DockerOperator
-from airflow.utils.dates import days_ago
 
 default_args = {
     "owner": "airflow",
-    "retries": 0
+    "retries": 0,
+    "email": ["admin@example.com"],
+    "email_on_failure": True,
+    "email_on_retry": True,
 }
 
 HOST_DATA_DIR = os.environ["HOST_DATA_DIR"]
@@ -15,18 +18,18 @@ HOST_DATA_DIR = os.environ["HOST_DATA_DIR"]
 with DAG(
         dag_id="prepare-model",
         default_args=default_args,
-        schedule_interval="@daily",
+        schedule_interval="@weekly",
         start_date=datetime.now()) as dag:
 
-    data_dir = "/data/raw/{{ ds }}"
+    externalsensor = ExternalTaskSensor(
+        task_id="wait-data",
+        external_dag_id='data-extractor',
+        external_task_id="download-data",
+        check_existence=True,
+        execution_delta=timedelta(days=1),
+        timeout=120)
 
-    download = DockerOperator(
-        image="airflow-download",
-        command=f"--out_dir {data_dir}",
-        task_id="download-data",
-        do_xcom_push=False,
-        volumes=[f"{HOST_DATA_DIR}:/data"]
-    )
+    data_dir = "/data/raw/{{ ds }}"
 
     report_dir = os.path.join(data_dir, "report")
 
@@ -59,28 +62,11 @@ with DAG(
 
     validate = DockerOperator(image="airflow-validate",
                               command=f"--valid_dir {train_test_dir}/test --model_path {model_path} --metric_file {metric_path}",
-                              task_id="train",
+                              task_id="validate",
                               do_xcom_push=False,
                               volumes=[f"{HOST_DATA_DIR}:/data"]
                               )
 
-    # preprocess = DockerOperator(
-    #     image="mikhailmar/airflow-preprocess",
-    #     command="--input-dir /data/raw/{{ ds }} --output-dir /data/processed/{{ ds }}",
-    #     task_id="docker-airflow-preprocess",
-    #     do_xcom_push=False,
-    #     volumes=[
-    #         "/Users/mikhail.maryufich/PycharmProjects/airflow_examples/data:/data"]
-    # )
+    externalsensor >> [eda_anlysis, split]
 
-    # predict = DockerOperator(
-    #     image="mikhailmar/airflow-predict",
-    #     command="--input-dir /data/processed/{{ ds }} --output-dir /data/predicted/{{ ds }}",
-    #     task_id="docker-airflow-predict",
-    #     do_xcom_push=False,
-    #     volumes=[
-    #         "/Users/mikhail.maryufich/PycharmProjects/airflow_examples/data:/data"]
-    # )
-
-    download >> [eda_anlysis, split]
-    split >> train
+    split >> train >> validate
