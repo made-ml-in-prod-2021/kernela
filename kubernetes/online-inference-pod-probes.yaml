@@ -1,54 +1,33 @@
 apiVersion: v1
-kind: Service
+kind: Pod
 metadata:
-  name: web-gateway
+  name: simple-web-probes
 spec:
-  ports:
-      - port: 9000
-        targetPort: predictor-port
-  type: NodePort
-  selector:
-    app: predictor-web-instance
-
----
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: predictor-deploy-resources
-spec:
-  selector:
-    matchLabels:
-      app: predictor-web-instance
-  template:
-    metadata:
-      labels:
-        app: predictor-web-instance
-    spec:
-      containers:
-        - name: web-predictor
-          image: kernela/hear-diss-app
-          ports:
-            - name: predictor-port
-              containerPort: 8000
-          command: [ "/bin/bash" ]
-          args: ["-c", "sleep 20; (uvicorn heart_diss_app:app --log-level ${LOG_LEVEL} --host 0.0.0.0 --port ${APP_PORT}) & sleep 60; kill $!"] 
-          resources:
-            limits:
-              cpu: "1"
-              memory: "500Mi"
-            requests:
-              cpu: "500m"
-              memory: "100Mi"
-          livenessProbe:
-            httpGet:
-              path: /health
-              port: predictor-port
-            failureThreshold: 1
-            periodSeconds: 10
-            initialDelaySeconds: 25
-          readinessProbe:
-            tcpSocket:
-              port: predictor-port
-            initialDelaySeconds: 30
-            periodSeconds: 10
+  containers:
+    - name: web-predictor
+      image: kernela/hear-diss-app:v2
+      env:
+        - name: START_DELAY
+          value: "20"
+      ports:
+        - name: predictor-port
+          containerPort: 8000
+      resources:
+          limits:
+            cpu: "1"
+            memory: "500Mi"
+          requests:
+            cpu: "500m"
+            memory: "100Mi"
+      livenessProbe:
+        httpGet:
+          path: /health
+          port: predictor-port
+        failureThreshold: 1
+        periodSeconds: 5
+        initialDelaySeconds: 22
+      readinessProbe:
+        tcpSocket:
+          port: predictor-port
+        initialDelaySeconds: 22
+        periodSeconds: 10          

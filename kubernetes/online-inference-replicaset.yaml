@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: predictor-deploy-replica
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: predictor-web-instance
+  template:
+    metadata:
+      labels:
+        app: predictor-web-instance
+    spec:
+      containers:
+        - name: web-predictor
+          image: kernela/hear-diss-app
+          ports:
+            - name: predictor-port
+              containerPort: 8000
+          resources:
+            limits:
+              cpu: "1"
+              memory: "500Mi"
+            requests:
+              cpu: "500m"
+              memory: "100Mi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: predictor-port
+            failureThreshold: 1
+            periodSeconds: 10
+            initialDelaySeconds: 22
+          readinessProbe:
+            tcpSocket:
+              port: predictor-port
+            initialDelaySeconds: 22
+            periodSeconds: 10          

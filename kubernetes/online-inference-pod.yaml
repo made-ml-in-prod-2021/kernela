@@ -1,33 +1,11 @@
 apiVersion: v1
-kind: Service
+kind: Pod
 metadata:
-  name: web-gateway
+  name: simple-web-pod
 spec:
-  ports:
-      - port: 9000
-        targetPort: predictor-port
-  type: NodePort
-  selector:
-    app: predictor-web-instance
-
----
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: predictor-deploy
-spec:
-  selector:
-    matchLabels:
-      app: predictor-web-instance
-  template:
-    metadata:
-      labels:
-        app: predictor-web-instance
-    spec:
-      containers:
-        - name: web-predictor
-          image: kernela/hear-diss-app
-          ports:
-            - name: predictor-port
-              containerPort: 8000
+  containers:
+    - name: web-predictor
+      image: kernela/hear-diss-app
+      ports:
+        - name: predictor-port
+          containerPort: 8000
