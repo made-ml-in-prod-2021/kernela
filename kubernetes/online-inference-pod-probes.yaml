@@ -32,7 +32,7 @@ spec:
             - name: predictor-port
               containerPort: 8000
           command: [ "/bin/bash" ]
-          args: ["-c", "sleep 1; (uvicorn heart_diss_app:app --log-level ${LOG_LEVEL} --host 0.0.0.0 --port ${APP_PORT}) & sleep 10; kill $!"] 
+          args: ["-c", "sleep 20; (uvicorn heart_diss_app:app --log-level ${LOG_LEVEL} --host 0.0.0.0 --port ${APP_PORT}) & sleep 60; kill $!"] 
           resources:
             limits:
               cpu: "1"
@@ -40,3 +40,15 @@ spec:
             requests:
               cpu: "500m"
               memory: "100Mi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: predictor-port
+            failureThreshold: 1
+            periodSeconds: 10
+            initialDelaySeconds: 25
+          readinessProbe:
+            tcpSocket:
+              port: predictor-port
+            initialDelaySeconds: 30
+            periodSeconds: 10
