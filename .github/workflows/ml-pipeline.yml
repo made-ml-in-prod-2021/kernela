@@ -117,7 +117,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
       
-      - name: Build and push
+      - name: Build and push working example
         id: docker_build
         uses: docker/build-push-action@v2
         with:
@@ -128,6 +128,18 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
           tags: ${{ secrets.DOCKERHUB_USER }}/hear-diss-app:latest
+      
+      - name: Build and push no working example
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          builder: ${{ steps.buildx.outputs.name }}
+          context: ${{ env.HOME_DIR }}
+          file: ${{ env.HOME_DIR }}/Dockerfile
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          tags: ${{ secrets.DOCKERHUB_USER }}/hear-diss-app:v2
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
