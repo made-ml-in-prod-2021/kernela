@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-gateway
+spec:
+  ports:
+      - port: 8000
+  type: NodePort
+  selector:
+    app: web-predictor
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+    name: web-pod
+    labels:
+      app: web-predictor
+spec:
+  containers:
+    - name: web
+      image: kernela/hear-diss-app
+      ports:
+        - name: web
+          containerPort: 8000
