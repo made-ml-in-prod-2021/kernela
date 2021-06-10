@@ -64,3 +64,9 @@ def test_many_prediction(test_client):
 def test_invalid_data(test_client, body):
     responce = test_client.post(API_URL, json=body)
     assert responce.status_code == 400
+
+
+def test_invalid_data(test_client):
+    responce = test_client.get("/health")
+    assert responce.status_code == 200
+    assert responce.json() == {"status": "OK"}
