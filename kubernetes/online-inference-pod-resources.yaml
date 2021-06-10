@@ -15,7 +15,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: predictor-deploy
+  name: predictor-deploy-resources
 spec:
   selector:
     matchLabels:
@@ -31,3 +31,10 @@ spec:
           ports:
             - name: predictor-port
               containerPort: 8000
+          resources:
+            limits:
+              cpu: "1"
+              memory: "500Mi"
+            requests:
+              cpu: "500m"
+              memory: "100Mi"

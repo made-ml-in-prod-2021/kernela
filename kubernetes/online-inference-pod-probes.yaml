@@ -15,7 +15,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: predictor-deploy
+  name: predictor-deploy-resources
 spec:
   selector:
     matchLabels:
@@ -31,3 +31,12 @@ spec:
           ports:
             - name: predictor-port
               containerPort: 8000
+          command: [ "/bin/bash" ]
+          args: ["-c", "sleep 1; (uvicorn heart_diss_app:app --log-level ${LOG_LEVEL} --host 0.0.0.0 --port ${APP_PORT}) & sleep 10; kill $!"] 
+          resources:
+            limits:
+              cpu: "1"
+              memory: "500Mi"
+            requests:
+              cpu: "500m"
+              memory: "100Mi"
