@@ -4,7 +4,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import PlainTextResponse
 from fastapi.exceptions import RequestValidationError
 
-from .api import predict_router
+from .api import predict_router, health_router
 from .config import AppConfig
 from .predictor import HeartDissPredictor
 
@@ -30,3 +30,4 @@ async def add_model(request: Request, call_next):
     return response
 
 app.include_router(predict_router)
+app.include_router(health_router)
