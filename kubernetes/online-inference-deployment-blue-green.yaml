@@ -15,12 +15,12 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: predictor-deploy-crashing
+  name: predictor-deploy-all-online
 spec:
   strategy:
     rollingUpdate:
-      maxSurge: 0%
-      maxUnavailable: 100%
+      maxSurge: 100%
+      maxUnavailable: 0%
   replicas: 2
   selector:
     matchLabels:
