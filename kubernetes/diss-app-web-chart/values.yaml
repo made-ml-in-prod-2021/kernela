@@ -1,0 +1,31 @@
+# Default values for diss-app-web.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 2
+
+image:
+  repository: kernela/hear-diss-app
+  pullPolicy: IfNotPresent
+  tag: ""
+
+service:
+  type: NodePort
+  port: 8000
+
+livenessProbe:
+  failureThreshold: 1
+  periodSeconds: 10
+  initialDelaySeconds: 25
+
+readinessProbe:
+  initialDelaySeconds: 20
+  periodSeconds: 10
+
+resources:
+  limits:
+    cpu: "1"
+    memory: "500Mi"
+  requests:
+    cpu: "500m"
+    memory: "100Mi"
