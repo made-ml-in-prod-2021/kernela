@@ -1,0 +1,10 @@
+ARG AIRFLOW_BASE_IMAGE="apache/airflow:2.0.0-python3.7"
+
+FROM ${AIRFLOW_BASE_IMAGE}
+
+USER root
+
+RUN pip install --user --no-cache-dir \
+    apache-airflow-providers-docker==1.2.0
+
+ENV PYTHONPATH=/home/airflow/.local/lib/python3.7/site-packages

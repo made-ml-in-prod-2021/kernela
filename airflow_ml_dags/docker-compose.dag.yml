@@ -1,0 +1,37 @@
+version: '3.7'
+
+services:
+  ml_base:
+    build:
+      context: images/airflow-ml-base
+    image: airflow-ml-base
+
+  train:
+    build:
+      context: images/airflow-train
+    image: airflow-train
+
+  download:
+    build:
+      context: images/airflow-download
+    image: airflow-download
+
+  eda:
+    build:
+      context: images/airflow-eda
+    image: airflow-eda
+
+  validate:
+    build:
+      context: images/airflow-validate
+    image: airflow-validate
+
+  split:
+    build:
+      context: images/airflow-split
+    image: airflow-split
+
+  predict:
+    build:
+      context: images/airflow-predict
+    image: airflow-predict

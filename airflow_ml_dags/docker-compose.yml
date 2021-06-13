@@ -1,0 +1,133 @@
+version: '3.7'
+
+x-airflow-image: &airflow_image apache/airflow:2.1.0-python3.7
+
+x-airflow-common: &airflow-common
+  build:
+    context: images/airflow-docker
+    args:
+      AIRFLOW_BASE_IMAGE: *airflow_image
+  image: airflow-docker
+  environment:
+    &airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__CORE__LOAD_DEFAULT_CONNECTIONS: 'false'
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${DB_USER}:${DB_PASS}@postgres:${DB_PORT:-5432}/airflow
+    AIRFLOW__CORE__STORE_DAG_CODE: 'true'
+    AIRFLOW__CORE__STORE_SERIALIZED_DAGS: 'true'
+    AIRFLOW__WEBSERVER__EXPOSE_CONFIG: 'true'
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
+    HOST_DATA_DIR: ${HOST_DATA_DIR}
+  volumes:
+    &airflow-common-volumes
+    - ./dags:/opt/airflow/dags
+    - ./logs:/opt/airflow/logs
+    - ${HOST_DATA_DIR?:You need to set an absolute path to data directory on host machine}:/opt/airflow/data
+    - /var/run/docker.sock:/var/run/docker.sock
+  depends_on:
+    postgres:
+      condition: service_healthy
+
+# ====================================== /AIRFLOW ENVIRONMENT VARIABLES ======================================
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_MULTIPLE_DATABASES: airflow,mlflow
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
+      - ./db/multiple-databases.sh:/docker-entrypoint-initdb.d/multiple-databases.sh:ro
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 5
+    restart: always
+
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - "${WEB_PORT:-8080}:8080"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:${WEB_PORT:-8080}/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    restart: always
+    depends_on: 
+      airflow-init:
+        condition: service_completed_successfully  
+
+  airflow-init:
+    <<: *airflow-common
+    command: version
+    environment:
+      <<: *airflow-common-env
+      _AIRFLOW_DB_UPGRADE: 'true'
+      _AIRFLOW_WWW_USER_CREATE: 'true'
+      _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
+      _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-airflow}
+
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+    restart: always
+    environment: 
+      <<: *airflow-common-env
+      # In Docker opeartor it is not possible to set network as in the docker-compose
+      MLFLOW_S3_ENDPOINT_URL: http://localhost:9000
+      MLFLOW_TRACKING_URL: http://localhost:${TRACKING_SERVER_PORT}
+      AWS_ACCESS_KEY_ID: ${S3_ACCESS_KEY}
+      AWS_SECRET_ACCESS_KEY: ${S3_SECRET_KEY}
+      MODEL_NAME: log-reg
+    volumes: *airflow-common-volumes
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully 
+
+  minio-s3:
+    image: minio/minio:RELEASE.2021-05-26T00-22-46Z
+    entrypoint: sh
+    command: -c 'mkdir -p /data/mlflow && /usr/bin/minio server /data'
+    volumes:
+      - ./s3-data:/data
+    environment:
+      - MINIO_ACCESS_KEY=${S3_ACCESS_KEY:?}
+      - MINIO_SECRET_KEY=${S3_SECRET_KEY:?}
+    ports:
+      - "${S3_STORAGE_PORT}:9000"
+
+  mlflow-tracking:
+    build: 
+      context: ./images/ml-flow
+    command: mlflow server --host 0.0.0.0 --backend-store-uri postgresql+psycopg2://${DB_USER}:${DB_PASS}@postgres:${DB_PORT}/mlflow --default-artifact-root s3://mlflow/
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:${TRACKING_SERVER_PORT}/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    environment: 
+      MLFLOW_S3_ENDPOINT_URL: http://minio-s3:9000
+      AWS_ACCESS_KEY_ID: ${S3_ACCESS_KEY}
+      AWS_SECRET_ACCESS_KEY: ${S3_SECRET_KEY}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio-s3:
+        condition: service_started
+      airflow-init:
+        condition: service_completed_successfully
+    ports:
+      - "${TRACKING_SERVER_PORT}:5000"
+  
+volumes:
+  postgres-db-volume:
+
+networks:
+  default:
+    name: airflow-network
