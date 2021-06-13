@@ -146,3 +146,18 @@ jobs:
 
       - name: Image digest
         run: echo ${{ steps.docker_build_no_work.outputs.digest }}
+
+  homework4:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: ./kubernetes
+    
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+
+      - name: Lint helm
+        run: 
+          helm lint ./diss-app-web-chart/   
