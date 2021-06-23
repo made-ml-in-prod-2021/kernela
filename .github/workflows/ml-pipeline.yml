@@ -63,7 +63,6 @@ jobs:
 
   homework2:
     runs-on: ubuntu-20.04
-    if: ${{ github.ref == 'refs/heads/homework3' }}
     defaults:
       run:
         working-directory: ./online_inference
@@ -117,8 +116,8 @@ jobs:
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
-
-      - name: Build and push
+      
+      - name: Build and push working example
         id: docker_build
         uses: docker/build-push-action@v2
         with:
@@ -132,6 +131,21 @@ jobs:
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+      
+      - name: Build and push no working example
+        id: docker_build_no_work
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          builder: ${{ steps.buildx.outputs.name }}
+          context: ${{ env.HOME_DIR }}
+          file: ${{ env.HOME_DIR }}/DockerfileNoWork
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          tags: ${{ secrets.DOCKERHUB_USER }}/hear-diss-app:v2
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build_no_work.outputs.digest }}
 
   homework3:
     runs-on: ubuntu-20.04
@@ -183,3 +197,16 @@ jobs:
           export COMPOSE_DOCKER_CLI_BUILD=1
           export DOCKER_BUILDKIT=1
           HOST_DATA_DIR=./tmp docker-compose build
+
+  homework4:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: ./kubernetes
+    
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Lint helm
+        run: 
+          helm lint ./diss-app-web-chart/   
