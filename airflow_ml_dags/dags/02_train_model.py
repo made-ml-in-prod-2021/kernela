@@ -2,7 +2,7 @@ import os
 from datetime import timedelta, datetime
 
 from airflow import DAG
-from airflow.sensors.external_task import ExternalTaskSensor
+from airflow.contrib.sensors.file_sensor import FileSensor
 from airflow.providers.docker.operators.docker import DockerOperator
 
 default_args = {
@@ -21,15 +21,13 @@ with DAG(
         schedule_interval="@weekly",
         start_date=datetime.now()) as dag:
 
-    externalsensor = ExternalTaskSensor(
-        task_id="wait-data",
-        external_dag_id='data-extractor',
-        external_task_id="download-data",
-        check_existence=True,
-        execution_delta=timedelta(days=1),
-        timeout=120)
-
     data_dir = "/data/raw/{{ ds }}"
+    
+    externalsensor = FileSensor(
+        task_id="airflow-wait-file",
+        filepath="raw/{{ ds }}",
+        fs_conn_id="data_path"
+    )
 
     report_dir = os.path.join(data_dir, "report")
 
