@@ -4,7 +4,7 @@ WORKDIR /home
 
 COPY ./requiremnets.txt ./
 
-RUN pip install --no-cache -r ./requiremnets.txt
+RUN pip install --no-cache-dir -r ./requiremnets.txt
 
 COPY ./validate.py ./
 
